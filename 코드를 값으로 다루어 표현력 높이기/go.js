@@ -8,34 +8,46 @@ const products = [
     { name: "바지", price: 25000 },
 ];
 
-const map = (fn, iter) => {
+// 함수를 값으로 다루면서 받아둔 함수를 내가 원하는 시점에 평가시키는 함수다.
+
+const curry =
+    (f) =>
+    (a, ..._) =>
+        _.length ? f(a, ..._) : (..._) => f(a, ..._);
+
+// function curry2(f) {
+//     return function (a, ..._) {
+//         return _.length ? f(a, ..._) : (..._) => f(a, ..._);
+//     };
+// }
+
+const map = curry((fn, iter) => {
     let res = [];
     for (const a of iter) {
         res.push(fn(a));
     }
     return res;
-};
+});
 
-const filter = (fn, iter) => {
+const filter = curry((fn, iter) => {
     let res = [];
     for (const p of iter) {
         if (fn(p)) res.push(p);
     }
     return res;
-};
+});
 
-const reduce = (fn, acc, iter) => {
+const reduce = curry((fn, acc, iter) => {
     if (!iter) {
         console.log("조건문이 실행됐습니다");
         iter = acc[Symbol.iterator]();
-        console.log(iter.next().value);
         acc = iter.next().value;
     }
     for (const a of iter) {
         acc = fn(acc, a);
     }
     return acc;
-};
+});
 
 const add = (a, b) => a + b;
 
@@ -68,8 +80,11 @@ go(
 // 파이프 함수는 함수들이 나열되어 있는 합성된 함수를 만드는 함수다.
 const pipe =
     (f, ...fs) =>
-    (...a) =>
-        go(f(...a), ...fs);
+    (...a) => {
+        console.log(...a);
+        return go(f(...a), ...fs);
+    };
+
 // pipe 함수는 함수를 리턴하는 함수다
 // const f = pipe(
 //     (a) => a + 1,
@@ -86,3 +101,13 @@ log(f(0, 1));
 // go 함수가 호출될 때, ...args 배열의 첫 번째 값이 undefined이면, iter 변수에 acc[Symbol.iterator]() 코드를 실행한 결과를 할당합니다. 이렇게 하면, iter 변수는 acc 배열의 이터레이터(iterator) 객체가 됩니다. 그리고 acc 변수에는 iter.next().value 코드를 실행한 결과를 할당합니다. 이렇게 하면, acc 변수는 iter 변수의 첫 번째 값을 가리키게 됩니다.
 
 // 하지만, go(a, ...fs) 코드에서는 iter 변수가 전혀 사용되지 않기 때문에, iter 변수가 undefined 값으로 유지됩니다. 따라서, reduce 함수에서 iter 변수가 undefined 값으로 전달되면, iter[Symbol.iterator]() 코드를 실행할 수 없기 때문에, TypeError가 발생합니다. 이러한 문제를 해결하기 위해서는, go 함수를 호출할 때, iter 변수에 이터러블(iterable) 객체를 전달해야 합니다.
+
+// Go 를 사용하여 읽기 좋은 코드 만들기
+
+go(
+    products,
+    filter((p) => p.price < 20000),
+    map((p) => p.price),
+    reduce(add),
+    log
+);

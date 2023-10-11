@@ -13,6 +13,7 @@ for (const p of products) {
 }
 log(under20000);
 
+// 함수형 코드
 const filter = (fn, iter) => {
     let res = [];
     for (const p of iter) {

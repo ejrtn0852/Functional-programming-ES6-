@@ -17,13 +17,16 @@ for (const n of nums) {
 }
 log(total);
 
-const reduce = (fn, acc, iter) => {
+const reduce = (f, acc, iter) => {
+    console.log(f + " 함수 제일 첫 줄 function");
+    console.log(iter + "함수 제일 첫줄 이터");
+    console.log(acc + " 함수 제일 첫 줄 acc");
     if (!iter) {
         iter = acc[Symbol.iterator]();
         acc = iter.next().value;
     }
     for (const a of iter) {
-        acc = fn(acc, a);
+        acc = f(acc, a);
     }
     return acc;
 };
@@ -31,3 +34,4 @@ const reduce = (fn, acc, iter) => {
 log(
     reduce((total_price, products) => total_price + products.price, 0, products)
 );
+// 상품의 가격의 총합을 구할 때 쓸모있어보임.

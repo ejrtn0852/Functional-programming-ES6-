@@ -18,12 +18,10 @@ for (const n of nums) {
 log(total);
 
 const reduce = (f, acc, iter) => {
-    console.log(f + " 함수 제일 첫 줄 function");
-    console.log(iter + "함수 제일 첫줄 이터");
-    console.log(acc + " 함수 제일 첫 줄 acc");
     if (!iter) {
         iter = acc[Symbol.iterator]();
         acc = iter.next().value;
+        console.log(`acc의 값이 뭘로 들어오니? : ${acc}`);
     }
     for (const a of iter) {
         acc = f(acc, a);

@@ -7,10 +7,14 @@ const products = [
     { name: "후드티", price: 30000 },
     { name: "바지", price: 25000 },
 ];
-const map = (fn, iter) => {
+const map = (f, iter) => {
+    // 반복문을 돌린 객체의 값을 배열에 담아 리턴한다.
     let res = [];
     for (const a of iter) {
-        res.push(fn(a));
+        res.push(f(a));
+        // 배열에 푸쉬되는 조건을 함수에 위임한다.
+        // 명령형 코드에서는 정적으로 코드가 완성된다면 함수를 위임한 코드는 동적으로 바뀐것 같다.
+        // f(a) => a.price  === res.push(a.price)
     }
     return res;
 };

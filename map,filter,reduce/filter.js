@@ -16,8 +16,12 @@ log(under20000);
 // 함수형 코드
 const filter = (fn, iter) => {
     let res = [];
+    // 배열에 이터러블 값이 들어온다
     for (const p of iter) {
         if (fn(p)) res.push(p);
+        // 들어오는 조건식을 함수에 위임한다. ex => if((p)=> p.price < 20000)
+        // const price = (p) => p.price < 20000 즉 리턴되는 값이 조건문의 조건식이 형성된다. // 자스에서 함수는 일급객체라 값으로 쓰일 수 있다.
+        // fn(p) === price(p)
     }
     return res;
 };
